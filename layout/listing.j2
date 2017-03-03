@@ -1,0 +1,16 @@
+{% extends "base.j2" %}
+{% from "macros.j2" import render_excerpt with context  %}
+{% block main %}
+{% for res in resource.node.walk_resources_sorted_by_time() %}
+<div class="docs-section">
+    {% refer to res.relative_path as post %}
+    <article>
+    <h3><a href="{{ content_url(res.url) }}">{{ res.meta.title }}</a></h3>
+    {{ post.excerpt|markdown|typogrify }}
+    <time datetime="{{ res.meta.created.strftime('%Y-%m-%d') }}">
+        Posted: {{ res.meta.created.strftime('%a, %d %b %Y') }}
+    </time>
+    </article>
+</div>
+{% endfor %}
+{% endblock %}

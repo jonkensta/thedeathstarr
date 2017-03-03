@@ -1,0 +1,41 @@
+{% extends "base.j2" %}
+
+{% block main -%}
+<article class="post">
+    <div class="row">
+        <nav class="post_nav">
+            <div class="four columns" style="text-align:center;">
+                <a class="backlink" href="{{ content_url(resource.node.url) }}">
+                    Back to list
+                </a>
+            </div>
+            <div class="four columns" style="text-align:center;">
+                <a class="prev{{' disabled' if not resource.prev_by_time }}" title="{{ resource.prev_by_time.meta.title }}" {% if resource.prev_by_time %} href="{{ content_url(resource.prev_by_time.url) }}"{% endif %}>
+                    Previous
+                </a>
+            </div>
+            <div class="four columns" style="text-align:center;">
+                <a class="next{{' disabled' if not resource.next_by_time }}" title="{{ resource.next_by_time.meta.title }}" {% if resource.next_by_time %} href="{{ content_url(resource.next_by_time.url) }}"{% endif %}>
+                    Next
+                </a>
+            </div>
+            <br>
+        </nav>
+    </div>
+
+    <h1 class="title">
+        <a href="{{ content_url(resource.url) }}">{{ resource.meta.title }}</a>
+    </h1>
+
+    <time datetime="{{ resource.meta.created.strftime('%Y-%m-%d') }}">
+        Posted: {{ resource.meta.created.strftime('%a, %d %b %Y') }}
+    </time>
+
+    {% filter markdown|typogrify -%}
+        {% mark post -%}
+            {% block post -%}{%- endblock %}
+        {%- endmark %}
+    {%- endfilter %}
+</article>
+
+{%- endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="{{ resource.meta.charset }}">
+  <title>{% block title %}{{ resource.meta.title }}{% endblock %}</title>
+  <meta http-equiv="X-UA-Compatible" content="{{ resource.meta.compatibility }}">
+  <meta name="description" content="{{ resource.meta.description }}">
+  <meta name="author" content="{{ resource.meta.author }}">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block css %}
+  <link rel="stylesheet" href="{{ media_url('css/normalize.css') }}">
+  <link rel="stylesheet" href="{{ media_url('css/skeleton.css') }}">
+  <link rel="stylesheet" href="{{ media_url('css/custom.css') }}">
+  {% endblock css %}
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block favicons %}
+  <link rel="shortcut icon" href="{{ media_url('/images/favicon.png') }}">
+  {% endblock favicons %}
+</head>
+
+<body id="{{ resource.meta.id if resource.meta.id else resource.slug }}">
+  {% block content %}
+  <div class="container">
+    {% block container %}
+    <header class="banner clearfix">
+    {% block header -%}{%- endblock header %}
+
+    {% block nav %}
+      <nav class='navbar'>
+        <ul class="navbar-list">
+          {% for item in menu -%}
+          {% set active = False -%}
+          {% if item.type == 'page' -%}
+            {% set active = (resource.url == site.content.resource_from_relative_path(item.url).url) -%}
+          {% else -%}
+            {% set active = (node == site.content.node_from_relative_path(item.url)) -%}
+          {%- endif %}
+          {% set classes = ['navbar-link'] -%}
+          {% do classes.append('active') if active -%}
+          {% do classes.append(item.css_class) if item.css_class -%}
+          <li class="navbar-item">
+            <a title="{{ item.description }}" class="{{ classes|join(' ') }}" href="{{ content_url(item.url) }}">
+              {{ item.name }}
+            </a>
+          </li>
+          {%- endfor %}
+        </ul>
+      </nav>
+      <div class="navbar-spacer"></div>
+    {%- endblock nav %}
+    </header>
+
+    <div class="content">
+      {% block main %}
+      {% endblock main %}
+    </div>
+    {% endblock container %}
+  </div> <!--! end of #container -->
+  {% endblock content%}
+</body>
+</html>
