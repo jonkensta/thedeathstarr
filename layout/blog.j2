@@ -1,7 +1,21 @@
 {% extends "base.j2" %}
 
 {% block main -%}
-<article class="post">
+<article class="post docs-section">
+    <h1 class="title">
+        <a href="{{ content_url(resource.url) }}">{{ resource.meta.title }}</a>
+    </h1>
+
+    <time datetime="{{ resource.meta.created.strftime('%Y-%m-%d') }}">
+        Posted: {{ resource.meta.created.strftime('%a, %d %b %Y') }}
+    </time>
+
+    {% filter markdown|typogrify -%}
+        {% mark post -%}
+            {% block post -%}{%- endblock %}
+        {%- endmark %}
+    {%- endfilter %}
+
     <div class="row">
         <nav class="post_nav">
             <div class="four columns" style="text-align:center;">
@@ -22,20 +36,6 @@
             <br>
         </nav>
     </div>
-
-    <h1 class="title">
-        <a href="{{ content_url(resource.url) }}">{{ resource.meta.title }}</a>
-    </h1>
-
-    <time datetime="{{ resource.meta.created.strftime('%Y-%m-%d') }}">
-        Posted: {{ resource.meta.created.strftime('%a, %d %b %Y') }}
-    </time>
-
-    {% filter markdown|typogrify -%}
-        {% mark post -%}
-            {% block post -%}{%- endblock %}
-        {%- endmark %}
-    {%- endfilter %}
 </article>
 
 {%- endblock %}
